@@ -1,0 +1,38 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
+    }
+}
+apply plugin: 'eu.appsatori.fatjar'
+
+
+version = '1.0.0'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile 'com.google.guava:guava:19.0',
+          'io.netty:netty-all:4.0.25.Final',
+          'com.google.protobuf:protobuf-java:2.6.1',
+          'org.apache.logging.log4j:log4j-api:2.5',
+          'org.apache.logging.log4j:log4j-core:2.5'
+    testCompile 'junit:junit:4.12'
+}
+
+test {
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
+fatJar {}

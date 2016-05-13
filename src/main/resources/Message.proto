@@ -1,0 +1,75 @@
+package com.jsongrts.raftlckmgr.msg;
+
+
+/**
+ * This file define the client-server messages
+ *
+ * CMDLINE to generate java file:
+ *
+ * cd src/main/resources
+ * protoc -I=. --java_out=../java ./Message.proto
+ */
+
+
+option java_outer_classname = "CSMsg";
+option optimize_for = SPEED;
+
+enum Status {
+    OK = 0;
+    INVALID_LOCK = 1;
+    NOT_LOCK_OWNER = 2;
+    TRYLOCK_TIMEOUT = 3;
+    UNKNOWN = 4;
+}
+
+message LockPayload {
+    required string lockName = 1;
+}
+
+message LockResponse {
+    required Status status = 1;
+    required string errmsg = 2;
+}
+
+message UnlockPayload {
+    required string lockName = 1;
+}
+
+message UnlockResponse {
+    required Status status = 1;
+    required string errmsg = 2;
+}
+
+message TrylockPayload {
+    required string lockName = 1;
+}
+
+message TrylockResponse {
+    required Status status = 1;
+    required string errmsg = 2;
+}
+
+
+message Message {
+    enum Command {
+        LOCK = 0;
+        TRYLOCK = 1;
+        UNLOCK = 2;
+
+        LOCK_RESPONSE = 3;
+        TRYLOCK_RESPONSE = 4;
+        UNLOCK_RESPONSE = 5;
+    }
+
+
+    // header part
+    required Command command = 2 [default = LOCK];
+
+    // request
+    optional UnlockResponse unlockResponse = 6;
+    optional LockPayload lockPayload = 7;
+    optional TrylockPayload trylockPayload = 8;
+    optional UnlockPayload unlockPayload = 9;
+    optional TrylockResponse trylockResponse = 10;
+    optional LockResponse lockResponse = 13;
+}
